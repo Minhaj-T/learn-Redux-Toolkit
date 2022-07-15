@@ -17,7 +17,15 @@ export const getCartItem = createAsyncThunk("cart/getCartItem", async (name,thun
     const response = await axios.get(url);
     return response;
   } catch (error) {
-    return thunkAPI.rejectWithValue("Please check you url...!")
+    const message =
+    (error.response &&
+      error.response.data &&
+      error.response.data.message) ||
+    error.message ||
+    error.toString()
+  return thunkAPI.rejectWithValue(message)
+  
+  
   }
 });
 
@@ -26,7 +34,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     clerCart: (state, action) => {
-      state.cartItems = []; 
+      state.cartItems = [];  
     },
     removeItem: (state, action) => {
       const itemId = action.payload;
